@@ -107,29 +107,83 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderChart() {
         if (weatherChart) weatherChart.destroy();
+
+        const todayIdx = 10;
+        const pointRadii = new Array(cachedData.labels.length).fill(3);
+        const pointHoverRadii = new Array(cachedData.labels.length).fill(5);
+        const pointBackgrounds = new Array(cachedData.labels.length).fill('#6366f1');
+        const pointBorderWidths = new Array(cachedData.labels.length).fill(1);
+
+        // Highlight today point
+        pointRadii[todayIdx] = 8;
+        pointHoverRadii[todayIdx] = 10;
+        pointBackgrounds[todayIdx] = '#ef4444'; // Bright red for today
+        pointBorderWidths[todayIdx] = 3;
+
         weatherChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: cachedData.labels,
                 datasets: [
-                    { label: '올해 2026', data: cachedData.thisYearTemp, borderColor: '#6366f1', fill: true, backgroundColor: 'rgba(99, 102, 241, 0.1)', tension: 0.4 },
-                    { label: '작년 2025', data: cachedData.lastYearTemp, borderColor: '#94a3b8', borderDash: [5, 5], tension: 0.4 }
+                    {
+                        label: '올해 2026',
+                        data: cachedData.thisYearTemp,
+                        borderColor: '#6366f1',
+                        fill: true,
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        tension: 0.4,
+                        pointRadius: pointRadii,
+                        pointHoverRadius: pointHoverRadii,
+                        pointBackgroundColor: pointBackgrounds,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: pointBorderWidths
+                    },
+                    {
+                        label: '작년 2025',
+                        data: cachedData.lastYearTemp,
+                        borderColor: '#94a3b8',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        pointRadius: 0 // Hide points for last year to focus on this year
+                    }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false } }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) label += context.parsed.y + '°C';
+                                if (context.dataIndex === todayIdx && context.datasetIndex === 0) {
+                                    label += ' (오늘 ★)';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
         });
     }
 
     function renderGrid() {
         weatherGrid.innerHTML = '';
         cachedData.labels.forEach((date, i) => {
+            const isToday = i === 10;
             const tile = document.createElement('div');
-            tile.className = 'status-tile';
+            tile.className = `status-tile ${isToday ? 'is-today' : ''}`;
 
             const curIcon = getStatusIcon(cachedData.thisYearTemp[i], cachedData.thisYearPrecip[i]);
             const lyIcon = getStatusIcon(cachedData.lastYearTemp[i], cachedData.lastYearPrecip[i]);
 
             tile.innerHTML = `
+                ${isToday ? '<span class="today-badge">TODAY</span>' : ''}
                 <div class="tile-date">${date}</div>
                 <div class="tile-comparison">
                     <div class="compare-item">
