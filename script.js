@@ -6,9 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastYearPrecipEl = document.getElementById('lastYearPrecip');
     const tempDiffEl = document.getElementById('tempDiff');
     const summaryText = document.getElementById('summaryText');
+    const tabBtns = document.querySelectorAll('.tab-btn');
     const ctx = document.getElementById('weatherChart').getContext('2d');
 
     let weatherChart;
+    let cachedData = null;
+    let currentTab = 'temp';
 
     const coords = {
         seoul: { lat: 37.5665, lon: 126.9780, name: '서울' },
@@ -38,21 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
             updateBtn.disabled = true;
             updateBtn.textContent = '데이터 업데이트 중...';
 
-            // 1. Fetch Current Year (Including precipitation)
             const forecastRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,precipitation_sum&past_days=10&forecast_days=14&timezone=auto`);
             const forecastData = await forecastRes.json();
 
-            // 2. Fetch Last Year Archive
             const archiveRes = await fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${formatDate(startDate2025)}&end_date=${formatDate(endDate2025)}&daily=temperature_2m_max,precipitation_sum&timezone=auto`);
             const archiveData = await archiveRes.json();
 
-            return {
+            cachedData = {
                 labels: forecastData.daily.time.map(t => t.split('-').slice(1).join('/')),
                 thisYearTemp: forecastData.daily.temperature_2m_max,
                 thisYearPrecip: forecastData.daily.precipitation_sum,
                 lastYearTemp: archiveData.daily.temperature_2m_max,
                 lastYearPrecip: archiveData.daily.precipitation_sum
             };
+
+            return cachedData;
         } catch (error) {
             console.error('Weather Data Error:', error);
             alert('날씨 데이터를 가져오는데 실패했습니다.');
@@ -75,75 +78,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (curTemp !== null && lyTemp !== null) {
             const diff = (curTemp - lyTemp).toFixed(1);
-            currentTempEl.textContent = `${curTemp}°C`;
-            currentPrecipEl.textContent = `${curPrecip}mm`;
-            lastYearPrecipEl.textContent = `${lyPrecip}mm`;
+            currentTempEl.textContent = `${curTemp.toFixed(1)}°C`;
+            currentPrecipEl.textContent = `${curPrecip.toFixed(1)}mm`;
+            lastYearPrecipEl.textContent = `${lyPrecip.toFixed(1)}mm`;
             tempDiffEl.textContent = `${diff > 0 ? '+' : ''}${diff}°C`;
             tempDiffEl.style.color = diff > 0 ? '#ef4444' : '#3b82f6';
             renderSummary(location, diff, curPrecip, lyPrecip);
         }
 
-        renderChart(data);
+        renderChart();
     }
 
-    function renderChart(data) {
+    function renderChart() {
+        if (!cachedData) return;
         if (weatherChart) {
             weatherChart.destroy();
         }
 
+        const isTemp = currentTab === 'temp';
+        const datasets = isTemp ? [
+            {
+                label: '올해 기온 (°C)',
+                data: cachedData.thisYearTemp,
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: '작년 기온 (°C)',
+                data: cachedData.lastYearTemp,
+                borderColor: '#94a3b8',
+                borderDash: [5, 5],
+                fill: false,
+                tension: 0.4
+            }
+        ] : [
+            {
+                label: '올해 강수량 (mm)',
+                data: cachedData.thisYearPrecip,
+                backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                borderColor: '#3b82f6',
+                borderWidth: 1
+            },
+            {
+                label: '작년 강수량 (mm)',
+                data: cachedData.lastYearPrecip,
+                backgroundColor: 'rgba(209, 213, 219, 0.4)',
+                borderColor: '#94a3b8',
+                borderWidth: 1
+            }
+        ];
+
         weatherChart = new Chart(ctx, {
-            type: 'bar',
+            type: isTemp ? 'line' : 'bar',
             data: {
-                labels: data.labels,
-                datasets: [
-                    {
-                        type: 'line',
-                        label: '올해 기온 (°C)',
-                        data: data.thisYearTemp,
-                        borderColor: '#6366f1',
-                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                        fill: false,
-                        tension: 0.4,
-                        yAxisID: 'y'
-                    },
-                    {
-                        type: 'line',
-                        label: '작년 기온 (°C)',
-                        data: data.lastYearTemp,
-                        borderColor: '#94a3b8',
-                        borderDash: [5, 5],
-                        fill: false,
-                        tension: 0.4,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: '올해 강수량 (mm)',
-                        data: data.thisYearPrecip,
-                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                        yAxisID: 'y1'
-                    },
-                    {
-                        label: '작년 강수량 (mm)',
-                        data: data.lastYearPrecip,
-                        backgroundColor: 'rgba(209, 213, 219, 0.4)',
-                        yAxisID: 'y1'
-                    }
-                ]
+                labels: cachedData.labels,
+                datasets: datasets
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
                 scales: {
                     y: {
-                        position: 'left',
-                        title: { display: true, text: '기온 (°C)' },
+                        beginAtZero: !isTemp,
+                        title: { display: true, text: isTemp ? '기온 (°C)' : '강수량 (mm)' },
                         grid: { color: 'rgba(0,0,0,0.05)' }
                     },
-                    y1: {
-                        position: 'right',
-                        title: { display: true, text: '강수량 (mm)' },
-                        grid: { display: false }
-                    }
+                    x: { grid: { display: false } }
                 }
             }
         });
@@ -151,16 +154,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderSummary(location, diff, curP, lyP) {
         const name = coords[location].name;
-        const pStatus = curP > lyP ? '작년보다 비/눈이 많이 오거나 올 예정' : '작년보다 건조한';
-
         summaryText.innerHTML = `
             <div class="history-item" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
-                <p><strong>${name} 지역</strong> 복합 기상 분석</p>
-                <p>기온: 작년 대비 <strong>${Math.abs(diff)}°C ${diff > 0 ? '상승' : '하강'}</strong></p>
-                <p>강수: <strong>${pStatus}</strong> 상태입니다. (오늘 기준 ${curP}mm vs 작년 ${lyP}mm)</p>
+                <p><strong>${name} 지역</strong> 분석 완료</p>
+                <p>오늘 기온은 작년 대비 <strong>${Math.abs(diff)}°C ${diff > 0 ? '상승' : '하강'}</strong>했습니다.</p>
+                <p>강수 현황: 올해는 <strong>${curP.toFixed(1)}mm</strong>, 작년에는 <strong>${lyP.toFixed(1)}mm</strong>의 비/눈이 내렸습니다.</p>
             </div>
         `;
     }
+
+    // Tab Switching Logic
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentTab = btn.dataset.tab;
+            renderChart();
+        });
+    });
 
     updateBtn.addEventListener('click', () => updateDashboard(locationSelect.value));
     updateDashboard('seoul');
