@@ -1,0 +1,354 @@
+:root {
+    --bg-dark: #020617;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --primary-gold: #fbbf24;
+    --primary-hover: #f59e0b;
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --gold-glow: 0 0 20px rgba(251, 191, 36, 0.4);
+
+    /* Lotto Ball Colors */
+    --ball-yellow: #facc15;
+    --ball-blue: #3b82f6;
+    --ball-red: #ef4444;
+    --ball-gray: #64748b;
+    --ball-green: #22c55e;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Background Effects */
+.background-radial {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #020617 100%);
+    z-index: -2;
+}
+
+.stars-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: twinkle var(--duration) infinite ease-in-out;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* Layout */
+.container {
+    max-width: 800px;
+    width: 90%;
+    margin: 4rem auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    z-index: 1;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.glow-text {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: 0.2rem;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.3));
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+/* Generator Card */
+.generator-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 2rem;
+    padding: 3rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    transition: transform 0.3s ease;
+}
+
+.numbers-display {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.lotto-ball {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #1e293b;
+    border: 2px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+    box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.4),
+        5px 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.lotto-ball.empty {
+    opacity: 0.5;
+    color: var(--text-dim);
+}
+
+.lotto-ball.active {
+    transform: scale(1.1) rotate(360deg);
+}
+
+/* Ball Color Logic in JS will apply these */
+.ball-range-1 {
+    background: radial-gradient(circle at 30% 30%, #fde047, #eab308);
+}
+
+/* 1-10 */
+.ball-range-2 {
+    background: radial-gradient(circle at 30% 30%, #60a5fa, #2563eb);
+}
+
+/* 11-20 */
+.ball-range-3 {
+    background: radial-gradient(circle at 30% 30%, #f87171, #dc2626);
+}
+
+/* 21-30 */
+.ball-range-4 {
+    background: radial-gradient(circle at 30% 30%, #94a3b8, #475569);
+}
+
+/* 31-40 */
+.ball-range-5 {
+    background: radial-gradient(circle at 30% 30%, #4ade80, #16a34a);
+}
+
+/* 41-45 */
+
+/* Button */
+.action-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.primary-btn {
+    position: relative;
+    padding: 1.2rem 3rem;
+    background: var(--primary-gold);
+    border: none;
+    border-radius: 1rem;
+    color: #020617;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    background: var(--primary-hover);
+    box-shadow: var(--gold-glow);
+}
+
+.primary-btn:active {
+    transform: translateY(1px);
+}
+
+.button-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+    transition: 0.5s;
+}
+
+.primary-btn:hover .button-glow {
+    left: 100%;
+}
+
+/* History */
+.history-section {
+    width: 100%;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    border-left: 4px solid var(--primary-gold);
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.history-nums {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.history-ball {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-history {
+    color: var(--text-dim);
+    text-align: center;
+    padding: 2rem;
+    border: 1px dashed var(--glass-border);
+    border-radius: 1rem;
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.history-time {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+}
+
+.copy-btn {
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid var(--primary-gold);
+    color: var(--primary-gold);
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: var(--primary-gold);
+    color: #020617;
+}
+
+/* Footer */
+.footer {
+    padding: 2rem;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .glow-text {
+        font-size: 2.5rem;
+    }
+
+    .lotto-ball {
+        width: 60px;
+        height: 60px;
+        font-size: 1.4rem;
+    }
+
+    .generator-card {
+        padding: 2rem 1rem;
+    }
+}
