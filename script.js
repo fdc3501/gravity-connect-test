@@ -569,6 +569,13 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
+    const scrollCta = document.querySelector('.scroll-cta');
+    if (scrollCta) {
+        scrollCta.addEventListener('click', () => {
+            document.getElementById('analysis').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
