@@ -244,6 +244,11 @@ document.addEventListener('DOMContentLoaded', () => {
             aiInsightArea.classList.remove('hidden');
         }
 
+        // Show Share Area
+        const shareArea = document.getElementById('shareArea');
+        if (shareArea) shareArea.classList.remove('hidden');
+
+        lucide.createIcons();
         renderFavorites();
         renderContent();
     }
