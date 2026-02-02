@@ -147,6 +147,7 @@
                     <a href="#about" data-i18n="nav_about">서비스 소개</a>
                     <a href="#methodology" data-i18n="nav_methodology">분석 방법</a>
                     <a href="#partnership" data-i18n="nav_partnership">제휴 문의</a>
+                    <a href="#terms" data-i18n="nav_terms">이용약관</a>
                     <a href="#privacy" data-i18n="nav_privacy">개인정보처리방침</a>
                 </div>
                 <div class="lang-switcher">
@@ -248,28 +249,42 @@
                             data-i18n="insight_title">오늘의 날씨 분석 리포트</span></h3>
                     <div id="aiInsightText" class="insight-content">
                         <!-- Dynamic analysis will be inserted by JS -->
-                    </div>
-                </div>
+                        <!-- SNS Share Area -->
+                        <div id="shareArea" class="share-container hidden">
+                            <p class="share-label" data-i18n="share_label">분석 결과 공유하고 친구들에게 자랑하기</p>
+                            <div class="share-buttons">
+                                <button id="shareKakao" class="share-btn kakao" title="카카오톡 공유">
+                                    <i data-lucide="message-circle"></i>
+                                </button>
+                                <button id="shareTwitter" class="share-btn twitter" title="X(트위터) 공유">
+                                    <i data-lucide="twitter"></i>
+                                </button>
+                                <button id="shareFacebook" class="share-btn facebook" title="페이스북 공유">
+                                    <i data-lucide="facebook"></i>
+                                </button>
+                                <button id="copyLink" class="share-btn copy" title="링크 복사">
+                                    <i data-lucide="link"></i>
+                                </button>
+                            </div>
+                        </div>
 
-                <!-- SNS Share Area -->
-                <div id="shareArea" class="share-container hidden">
-                    <p class="share-label" data-i18n="share_label">분석 결과 공유하고 친구들에게 자랑하기</p>
-                    <div class="share-buttons">
-                        <button id="shareKakao" class="share-btn kakao" title="카카오톡 공유">
-                            <i data-lucide="message-circle"></i>
-                        </button>
-                        <button id="shareTwitter" class="share-btn twitter" title="X(트위터) 공유">
-                            <i data-lucide="twitter"></i>
-                        </button>
-                        <button id="shareFacebook" class="share-btn facebook" title="페이스북 공유">
-                            <i data-lucide="facebook"></i>
-                        </button>
-                        <button id="copyLink" class="share-btn copy" title="링크 복사">
-                            <i data-lucide="link"></i>
-                        </button>
+                        <!-- Trending Weather Section -->
+                        <div id="trendingWeather" class="trending-container reveal">
+                            <h3 class="trending-title" data-i18n="trending_title">실시간 기상 브리핑</h3>
+                            <div id="trendingList" class="trending-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Manual Ad Placement -->
+                        <div class="ad-container-manual reveal">
+                            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8352432932010466"
+                                data-ad-slot="9876543210" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
                     </div>
-                </div>
-            </div>
         </section>
 
         <section id="about" class="history-section info-card reveal">
@@ -323,9 +338,9 @@
         </section>
 
         <section id="partnership" class="history-section info-card reveal">
-            <h2 class="section-title">제휴 문의</h2>
+            <h2 class="section-title" data-i18n="nav_partnership">문의하기</h2>
             <div class="info-content">
-                <p>WEATHER ANALYTICS와의 협력 및 데이터 제휴 제안을 환영합니다. 아래 폼을 통해 문의해 주시면 신속히 답변해 드리겠습니다.</p>
+                <p>WEATHER ANALYTICS와의 협력 및 데이터 제휴 제안, 혹은 일반적인 문의 사항을 환영합니다. 아래 폼을 통해 문의해 주시면 신속히 답변해 드리겠습니다.</p>
                 <form action="https://formspree.io/f/xaqjgedd" method="POST" class="contact-form">
                     <div class="form-group">
                         <label for="name">성함 / 업체명</label>
@@ -345,12 +360,36 @@
             </div>
         </section>
 
+        <section id="terms" class="history-section info-card reveal">
+            <h2 class="section-title" data-i18n="nav_terms">이용약관 (Terms of Use)</h2>
+            <div class="info-content">
+                <p>본 서비스인 <strong>WEATHER ANALYTICS</strong>(이하 '서비스')를 이용해 주셔서 감사합니다. 이용자는 본 서비스를 이용함으로써 다음의 약관에 동의하게
+                    됩니다.</p>
+                <ul>
+                    <li><strong>서비스의 목적</strong>: 본 서비스는 과거 기상 데이터와 현재 예보 데이터를 비교 분석하여 정보성 콘텐츠를 제공하는 것을 목적으로 합니다.</li>
+                    <li><strong>데이터의 정확성</strong>: 본 서비스가 제공하는 날씨 정보는 Open-Meteo 등 외부 API를 기반으로 하며, 실제 기상 상황과 다를 수 있습니다.
+                        기상 특보나 안전에 직결된 결정은 기상청 등 공식 기관의 정보를 확인하시기 바랍니다.</li>
+                    <li><strong>책임의 제한</strong>: 서비스 이용 중 발생한 데이터 오류로 인한 어떠한 손해에 대해서도 서비스 제공자는 책임을 지지 않습니다.</li>
+                </ul>
+            </div>
+        </section>
+
         <section id="privacy" class="history-section info-card reveal">
             <h2 class="section-title">개인정보처리방침 (Privacy Policy)</h2>
             <div class="info-content">
                 <p>본 서비스는 사용자의 위치 정보를 포함한 어떠한 개인 데이터도 서버에 저장하지 않습니다.</p>
                 <p>지역 선택은 전적으로 사용자의 브라우저 내에서 처리되며, 구글 애드센스 등 타사 광고 서비스가 쿠키를 통해 비식별 사용자 정보를 수집할 수 있습니다. 이는 광고의 관련성을 높이기
                     위한 목적이며, 사용자는 브라우저 설정을 통해 이를 언제든지 거부할 수 있습니다.</p>
+                <p><strong>쿠키 사용 안내</strong>: 당사는 서비스 개선 및 트래픽 분석을 위해 Google Analytics와 Google AdSense를 사용하며, 이 과정에서 쿠키가
+                    사용될 수 있습니다.</p>
+            </div>
+        </section>
+
+        <section id="disclaimer" class="history-section info-card reveal">
+            <h2 class="section-title">면책 조항 (Disclaimer)</h2>
+            <div class="info-content">
+                <p>WEATHER ANALYTICS는 공식적인 기상 예보 서비스가 아니며, 제공되는 데이터는 오직 연구 및 정보 제공용으로만 사용되어야 합니다. 옷차림 추천은 일반적인 기온 분포에 따른
+                    제안일 뿐, 개인의 체질이나 특수한 환경에 따라 적합하지 않을 수 있습니다.</p>
             </div>
         </section>
 
@@ -369,6 +408,13 @@
     <button id="scrollTopBtn" class="scroll-top-btn hidden" title="위로 가기">
         ↑
     </button>
+
+    <div id="cookieConsent" class="cookie-banner hidden">
+        <div class="cookie-content">
+            <p data-i18n="cookie_msg">우리는 서비스 향상을 위해 쿠키를 사용합니다. 서비스를 계속 이용하시면 쿠키 사용에 동의하시는 것으로 간주됩니다.</p>
+            <button id="acceptCookie" class="secondary-btn">동의함</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

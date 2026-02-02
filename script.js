@@ -5,8 +5,11 @@ const i18n = {
         nav_analysis: "분석 도구",
         nav_about: "서비스 소개",
         nav_methodology: "분석 방법",
-        nav_partnership: "제휴 문의",
+        nav_partnership: "문의하기",
+        nav_terms: "이용약관",
         nav_privacy: "개인정보처리방침",
+        cookie_msg: "우리는 서비스 향상을 위해 쿠키를 사용합니다. 서비스를 계속 이용하시면 쿠키 사용에 동의하시는 것으로 간주됩니다.",
+        trending_title: "실시간 기상 브리핑",
         hero_subtitle: "올해와 작년의 오늘 날씨 비교 분석,<br>기후 변화 데이터를 한눈에 확인하세요.",
         cta_text: "날씨 데이터 비교 시작하기",
         search_placeholder: "도시 이름을 검색하세요... (예: 서울, Tokyo)",
@@ -52,7 +55,10 @@ const i18n = {
         nav_about: "About",
         nav_methodology: "Method",
         nav_partnership: "Contact",
+        nav_terms: "Terms",
         nav_privacy: "Privacy",
+        cookie_msg: "We use cookies to improve your experience. By using our service, you agree to our use of cookies.",
+        trending_title: "Real-time Weather Briefing",
         hero_subtitle: "Comparative analysis of today's weather vs last year,<br>Check climate change data at a glance.",
         cta_text: "Start Weather Comparison",
         search_placeholder: "Search for a city... (e.g. New York, Tokyo)",
@@ -128,7 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { lat: 35.1796, lon: 129.0756, name: '부산', country: 'South Korea' },
         { lat: 33.4890, lon: 126.4983, name: '제주', country: 'South Korea' },
         { lat: 35.6895, lon: 139.6917, name: 'Tokyo', country: 'Japan' },
-        { lat: 40.7128, lon: -74.0060, name: 'New York', country: 'USA' }
+        { lat: 40.7128, lon: -74.0060, name: 'New York', country: 'USA' },
+        { lat: 51.5074, lon: -0.1278, name: 'London', country: 'UK' },
+        { lat: 48.8566, lon: 2.3522, name: 'Paris', country: 'France' }
     ];
 
     let currentLang = localStorage.getItem('weatherLang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
@@ -164,6 +172,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('lang-ko').addEventListener('click', () => applyLanguage('ko'));
     document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
+
+    // --- Cookie Consent ---
+    const cookieConsent = document.getElementById('cookieConsent');
+    const acceptCookie = document.getElementById('acceptCookie');
+    if (!localStorage.getItem('cookieAccepted')) {
+        cookieConsent.classList.remove('hidden');
+    }
+    acceptCookie.addEventListener('click', () => {
+        localStorage.setItem('cookieAccepted', 'true');
+        cookieConsent.classList.add('hidden');
+    });
 
     function getWeatherStatus(temp, precip) {
         if (precip <= 0.1) return i18n[currentLang].clear;
@@ -444,6 +463,29 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
         renderFavorites();
         renderContent();
+        renderTrending();
+    }
+
+    async function renderTrending() {
+        const trendingList = document.getElementById('trendingList');
+        if (!trendingList) return;
+
+        trendingList.innerHTML = '';
+        const cities = favorites.slice(0, 4);
+
+        for (const city of cities) {
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,weather_code&timezone=auto`);
+            const data = await res.json();
+
+            const item = document.createElement('div');
+            item.className = 'trending-item';
+            item.innerHTML = `
+                <span class="trending-city">${city.name}</span>
+                <span class="trending-temp">${data.current.temperature_2m}°C</span>
+                <span class="trending-icon">${getStatusIcon(data.current.temperature_2m, 0)}</span>
+            `;
+            trendingList.appendChild(item);
+        }
     }
 
     function renderContent() {
@@ -635,4 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize
     applyLanguage(currentLang);
+
+    // Initial Load for SEO/Content Boost
+    updateDashboard();
 });
