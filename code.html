@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Daily Weather Comparison</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white transition-colors duration-300">
+<div class="relative flex h-auto min-h-screen w-full max-w-[430px] mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden border-x border-slate-200 dark:border-slate-800 shadow-2xl">
+<!-- TopAppBar Component -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-white flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Daily Comparison</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-slate-900 dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined text-[24px]">calendar_today</span>
+</button>
+</div>
+</div>
+<!-- HeadlineText Component (Current Temp) -->
+<div class="flex flex-col items-center pt-8 pb-2">
+<span class="material-symbols-outlined text-primary text-6xl mb-2">wb_sunny</span>
+<h1 class="text-slate-900 dark:text-white tracking-tight text-[48px] font-bold leading-tight px-4 text-center">74°F</h1>
+</div>
+<!-- BodyText Component (Conditions) -->
+<p class="text-slate-600 dark:text-slate-400 text-lg font-medium leading-normal pb-6 px-4 text-center">Mostly Sunny • San Francisco</p>
+<!-- Stats Component (Historical Comparison) -->
+<div class="flex flex-wrap gap-4 p-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Last Year Today</p>
+<p class="text-slate-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">72°F</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-sm">trending_up</span>
+<p class="text-primary text-sm font-bold leading-normal">Normal range</p>
+</div>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Temperature Diff</p>
+<p class="text-slate-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">+2°F</p>
+<p class="text-primary text-sm font-bold leading-normal">+2.7% vs 2023</p>
+</div>
+</div>
+<!-- SectionHeader Component -->
+<div class="px-4 pt-6">
+<h3 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">Climate Insight</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">10-year trend for October 24th</p>
+</div>
+<!-- Custom Trend Chart Component -->
+<div class="p-4">
+<div class="w-full bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-end justify-between h-32 gap-2">
+<div class="flex-1 bg-primary/20 rounded-t h-[60%]" title="2015"></div>
+<div class="flex-1 bg-primary/20 rounded-t h-[65%]" title="2016"></div>
+<div class="flex-1 bg-primary/20 rounded-t h-[55%]" title="2017"></div>
+<div class="flex-1 bg-primary/30 rounded-t h-[70%]" title="2018"></div>
+<div class="flex-1 bg-primary/30 rounded-t h-[75%]" title="2019"></div>
+<div class="flex-1 bg-primary/40 rounded-t h-[68%]" title="2020"></div>
+<div class="flex-1 bg-primary/50 rounded-t h-[82%]" title="2021"></div>
+<div class="flex-1 bg-primary/60 rounded-t h-[78%]" title="2022"></div>
+<div class="flex-1 bg-primary/80 rounded-t h-[85%]" title="2023"></div>
+<div class="flex-1 bg-primary rounded-t h-[92%]" title="2024"></div>
+</div>
+<div class="flex justify-between mt-3 text-[10px] text-slate-400 uppercase tracking-widest font-bold">
+<span>2015</span>
+<span>2024</span>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-start gap-3">
+<div class="p-2 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[20px]">info</span>
+</div>
+<div>
+<p class="text-slate-900 dark:text-white text-sm font-bold">Warming Trend</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed mt-1">Today is 4.2°F warmer than the 10-year average for this date. The local climate is showing a consistent upward trajectory.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Additional Section -->
+<div class="px-4 pt-4 pb-12">
+<div class="flex items-center justify-between mb-4 px-1">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Historical Extremes</h3>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-orange-400">wb_sunny</span>
+<span class="text-slate-700 dark:text-slate-300 font-medium">Record High (1998)</span>
+</div>
+<span class="font-bold">89°F</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-400">ac_unit</span>
+<span class="text-slate-700 dark:text-slate-300 font-medium">Record Low (1954)</span>
+</div>
+<span class="font-bold">48°F</span>
+</div>
+</div>
+</div>
+<!-- Tab Bar Placeholder for iOS feel -->
+<div class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex justify-around p-3 pb-8">
+<div class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] mt-1 font-bold">Today</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] mt-1 font-medium">Trends</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] mt-1 font-medium">Map</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] mt-1 font-medium">Settings</span>
+</div>
+</div>
+</div>
+</body></html>

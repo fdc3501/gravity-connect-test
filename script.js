@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPrecipEl.textContent = getWeatherStatus(curTemp, curPrecip);
         lastYearPrecipEl.textContent = getWeatherStatus(lastYearTemp, data.lastYearPrecip[todayIdx]);
         tempDiffEl.textContent = `${diff > 0 ? '+' : ''}${diff}°C`;
-        tempDiffEl.style.color = diff > 0 ? '#ef4444' : '#3b82f6';
+        tempDiffEl.style.color = diff > 0 ? '#13ec5b' : '#3b82f6';
 
         const outfit = getOutfitData(curTemp);
         outfitImg.src = outfit.img;
@@ -463,11 +463,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (weatherChart) weatherChart.destroy();
 
         const todayIdx = 10;
-        const pointRadii = new Array(cachedData.labels.length).fill(3);
-        const pointBackgrounds = new Array(cachedData.labels.length).fill('#6366f1');
+        const pointRadii = new Array(cachedData.labels.length).fill(4);
+        const pointBackgrounds = new Array(cachedData.labels.length).fill('rgba(19, 236, 91, 0.3)');
 
         pointRadii[todayIdx] = 8;
-        pointBackgrounds[todayIdx] = '#ef4444';
+        pointBackgrounds[todayIdx] = '#13ec5b';
 
         weatherChart = new Chart(ctx, {
             type: 'line',
@@ -477,9 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     {
                         label: i18n[currentLang].chart_label_this_year.replace('{year}', '2026').replace('{city}', selectedCity.name),
                         data: cachedData.thisYearTemp,
-                        borderColor: '#6366f1',
+                        borderColor: '#13ec5b',
                         fill: true,
-                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        backgroundColor: 'rgba(19, 236, 91, 0.1)',
                         tension: 0.4,
                         pointRadius: pointRadii,
                         pointBackgroundColor: pointBackgrounds,
